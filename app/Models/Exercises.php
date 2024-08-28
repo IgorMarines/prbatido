@@ -12,6 +12,7 @@ class exercises extends Model
     protected $fillable = [
         'name',
         'description',
-        'category'
+        'category',
     ];
 }
+

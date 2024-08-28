@@ -2,74 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\exercises;
+use App\Models\Exercises;
 use App\Http\Controllers\Controller;
+use App\Models\IndividualPr;
 use Illuminate\Http\Request;
 
 class ExercisesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
     public function getAllExercises()
     {
-        $exercises = exercises::all();
+        $exercises = Exercises::all();
         return response()->json($exercises);
     }
 
-
-
-    public function index()
+    public function createNewPr(Request $request)
     {
-        //
+        $auth = auth()->user();
+        $exercise = new IndividualPr();
+        $exercise->user_id = $auth->id;
+        $exercise->exercise_id = $request->exercise_id;
+        $exercise->weight = $request->weight;
+        $exercise->reps = $request->reps;
+        $exercise->sets = $request->sets;
+        $exercise->date = $request->date;
+        $exercise->save();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getExercisesOfUserLogged()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(exercises $exercises)
-    {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(exercises $exercises)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, exercises $exercises)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(exercises $exercises)
-    {
-        //
+        $auth = auth()->user();
+        $exercises = IndividualPr::where('user_id', $auth->id)->get();
+        return to_route('exercicios', ['userExercises' => $exercises]);
     }
 }

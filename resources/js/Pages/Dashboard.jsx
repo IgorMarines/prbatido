@@ -1,35 +1,29 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import Navbar from '@/components/Navbar/index';
+import EmDesenvolvimento from '@/Components/desenvolvimento/index';
+import { useEffect } from 'react';
 
-export default function Dashboard({ auth, exercises }) {
+export default function Dashboard({ userExercises }) {
+    useEffect(() => {
+        console.log(userExercises); // Verifica o conteúdo no console
+    }, [userExercises]);
 
-    console.log(exercises);
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-        >
-            <Head title="Dashboard" />
+        <>
+            <Navbar>
+                <div className="p-4">
+                    <h1 className="text-xl font-bold mb-4">User Exercises</h1>
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-black overflow-hidden shadow-sm sm:rounded-lg">
-                        {exercises.length > 0 ? (
-                            <div className="p-6 bg-black border-b border-gray-800">
-                                <h2 className="text-white text-lg font-semibold">Your Exercises</h2>
-
-                                <div className="mt-4 space-y-4">
-                                    {exercises.map((exercise) => (
-                                        <div key={exercise.id} className="bg-white p-4 rounded-lg">
-                                            <h3 className="text-lg font-semibold">{exercise.name}</h3>
-                                            <p className="text-gray-500">{exercise.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {userExercises.map((exercise, index) => (
+                            <div key={index} className="p-4 rounded-lg shadow-lg">
+                                <h2 className="text-lg font-bold">{exercise.name}</h2>
+                                <p>{exercise.description}</p>
                             </div>
-                        ) : null}
+                        ))}
                     </div>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+                <EmDesenvolvimento />
+            </Navbar>
+        </>
     );
 }
